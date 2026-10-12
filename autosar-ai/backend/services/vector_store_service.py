@@ -24,7 +24,9 @@ def add_chunks(project_id: int, document_id: int, chunks: list[dict]):
             "document_id": document_id,
             "chunk_index": chunk['chunk_index'],
             "page_start": chunk.get('page_start', 0),
-            "page_end": chunk.get('page_end', 0)
+            "page_end": chunk.get('page_end', 0),
+            "version_label": chunk.get('version_label', '1.0'),
+            "section_heading": chunk.get('section_heading', '')
         })
         
     collection.add(
@@ -40,14 +42,23 @@ def delete_chunks_by_document(project_id: int, document_id: int):
     except Exception:
         pass
 
-def search_chunks(project_id: int, query: str, top_k: int = 5, document_ids: list[int] = None):
+def search_chunks(project_id: int, query: str, top_k: int = 5, document_ids: list[int] = None, version_label: str = None):
     try:
         collection = get_collection(project_id)
-        where_filter = None
+        filters = []
         if document_ids and len(document_ids) == 1:
-            where_filter = {"document_id": document_ids[0]}
+            filters.append({"document_id": document_ids[0]})
         elif document_ids and len(document_ids) > 1:
-            where_filter = {"document_id": {"$in": document_ids}}
+            filters.append({"document_id": {"$in": document_ids}})
+            
+        if version_label and version_label.strip() and version_label not in ("All", "All Versions"):
+            filters.append({"version_label": version_label.strip()})
+
+        where_filter = None
+        if len(filters) == 1:
+            where_filter = filters[0]
+        elif len(filters) > 1:
+            where_filter = {"$and": filters}
             
         kwargs = {"query_texts": [query], "n_results": top_k}
         if where_filter:

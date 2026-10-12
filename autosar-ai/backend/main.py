@@ -4,8 +4,10 @@ from backend.database.connection import engine
 from backend.database.base import Base
 from backend.models import domain
 
-# Create tables for initial setup (in production use Alembic)
-Base.metadata.create_all(bind=engine)
+from backend.database.schema_migrator import migrate_database
+
+# Create tables and safely add any new columns
+migrate_database()
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -21,7 +23,7 @@ def health_check():
 def health_check_v1():
     return {"status": "ok", "app": settings.APP_NAME, "version": "v1"}
 
-from backend.api.v1 import projects, documents, sessions, entities, comparisons, findings, reports, diagnostics, settings as platform_settings
+from backend.api.v1 import projects, documents, sessions, entities, comparisons, findings, reports, diagnostics, settings as platform_settings, evaluation
 from backend.database.connection import SessionLocal
 
 # Ensure initial default project exists
@@ -54,6 +56,7 @@ app.include_router(findings.router, prefix="/api/v1", tags=["findings"])
 app.include_router(reports.router, prefix="/api/v1", tags=["reports"])
 app.include_router(diagnostics.router, prefix="/api/v1", tags=["diagnostics"])
 app.include_router(platform_settings.router, prefix="/api/v1", tags=["settings"])
+app.include_router(evaluation.router, prefix="/api/v1", tags=["evaluation"])
 
 if __name__ == "__main__":
     import uvicorn

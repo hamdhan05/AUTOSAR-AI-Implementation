@@ -26,12 +26,14 @@ class ProjectResponse(ProjectBase):
 
 class DocumentBase(BaseModel):
     original_filename: str
-    version_label: Optional[str] = None
+    version_label: Optional[str] = "1.0"
+    governance_state: Optional[str] = "DRAFT"
 
 class DocumentResponse(DocumentBase):
     id: int
     project_id: int
     status: str
+    governance_state: Optional[str] = "DRAFT"
     page_count: Optional[int]
     sha256_hash: Optional[str] = None
     metadata_json: Optional[str]

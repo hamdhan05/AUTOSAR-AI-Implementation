@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
+from pydantic import BaseModel
 import os
 import shutil
 import hashlib
@@ -14,12 +15,23 @@ from backend.services.vector_store_service import delete_chunks_by_document
 
 router = APIRouter()
 
+class GovernanceUpdateRequest(BaseModel):
+    governance_state: str
+    version_label: Optional[str] = None
+
 @router.get("/projects/{project_id}/documents", response_model=List[schemas.DocumentResponse])
 def get_documents(project_id: int, db: Session = Depends(get_db)):
     return db.query(models.Document).filter(models.Document.project_id == project_id).all()
 
 @router.post("/projects/{project_id}/documents", response_model=schemas.DocumentResponse)
-def upload_document(project_id: int, background_tasks: BackgroundTasks, file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_document(
+    project_id: int, 
+    background_tasks: BackgroundTasks, 
+    file: UploadFile = File(...), 
+    version_label: str = Form("1.0"),
+    governance_state: str = Form("DRAFT"),
+    db: Session = Depends(get_db)
+):
     if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are supported.")
     
@@ -55,8 +67,15 @@ def upload_document(project_id: int, background_tasks: BackgroundTasks, file: Up
         models.Document.sha256_hash == file_hash
     ).first()
     
+    clean_version = version_label.strip() if version_label and version_label.strip() else "1.0"
+    clean_governance = governance_state.strip().upper() if governance_state and governance_state.strip() else "DRAFT"
+
     if existing_doc:
         os.remove(file_path)
+        # Update version / governance if provided
+        existing_doc.version_label = clean_version
+        existing_doc.governance_state = clean_governance
+        db.commit()
         return existing_doc
         
     db_document = models.Document(
@@ -64,6 +83,8 @@ def upload_document(project_id: int, background_tasks: BackgroundTasks, file: Up
         original_filename=file.filename,
         storage_path=file_path,
         sha256_hash=file_hash,
+        version_label=clean_version,
+        governance_state=clean_governance,
         status="UPLOADED"
     )
     db.add(db_document)
@@ -74,6 +95,22 @@ def upload_document(project_id: int, background_tasks: BackgroundTasks, file: Up
     background_tasks.add_task(process_document, db_document.id)
     
     return db_document
+
+@router.patch("/documents/{document_id}/governance", response_model=schemas.DocumentResponse)
+def update_document_governance(document_id: int, req: GovernanceUpdateRequest, db: Session = Depends(get_db)):
+    doc = db.query(models.Document).filter(models.Document.id == document_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    valid_states = ["DRAFT", "IN_REVIEW", "APPROVED", "SUPERSEDED"]
+    clean_state = req.governance_state.strip().upper()
+    if clean_state not in valid_states:
+        raise HTTPException(status_code=400, detail=f"Invalid governance state '{req.governance_state}'. Must be one of: {valid_states}")
+    doc.governance_state = clean_state
+    if req.version_label:
+        doc.version_label = req.version_label.strip()
+    db.commit()
+    db.refresh(doc)
+    return doc
 
 @router.get("/documents/{document_id}", response_model=schemas.DocumentResponse)
 def get_document(document_id: int, db: Session = Depends(get_db)):
