@@ -1,0 +1,4 @@
+Finding_ID,Document_Name,Finding_Type,Severity,Description,Review_Status,Reviewer_Comments
+F001,AUTOSAR_Adaptive_Powertrain_HLD.pdf,INSECURE_IPC,High,Insecure IPC communication detected without authentication token on interface SensorReceiver_IF,open,Pending verification by safety architect
+F002,AUTOSAR_Adaptive_Powertrain_HLD.pdf,CIRCULAR_DEPENDENCY,Medium,Circular dependency cycle detected between BatteryManagement and PowertrainManager,confirmed,Architecture review confirms need for decoupling queue
+F003,AUTOSAR_Adaptive_Powertrain_HLD.pdf,MISSING_PORT_BINDING,Low,Port RPort_AmbientTemp has no corresponding provided port binding in composite specification,resolved,Resolved in revised revision 1.1 specification

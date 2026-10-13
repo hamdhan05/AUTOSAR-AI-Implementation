@@ -1,0 +1,2 @@
+ID,Finding Type,Severity,Status,Description,Comments
+11,Security Rule,High,open,'=cmd|' /C calc'!A0,

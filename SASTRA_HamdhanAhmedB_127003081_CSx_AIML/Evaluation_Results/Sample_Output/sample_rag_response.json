@@ -1,0 +1,43 @@
+{
+  "query": "Which software component manages engine operations and torque arbitration?",
+  "answer": "According to Section 3.2 (Page 4) of the Powertrain High-Level Design document, the PowertrainManager software component is responsible for supervisory control over engine operations and motor torque arbitration. It coordinates with the BatteryManagement component via the Sender-Receiver interface SR_TorqueCommand.",
+  "citations": [
+    {
+      "citation_id": 1,
+      "document_id": 1,
+      "document_name": "AUTOSAR_Adaptive_Powertrain_HLD.pdf",
+      "page_start": 4,
+      "page_end": 4,
+      "version_label": "1.0",
+      "excerpt": "The PowertrainManager SWC performs supervisory control, torque arbitration, and coordinates commands between internal combustion and electric traction units."
+    }
+  ],
+  "claim_decomposition": [
+    {
+      "claim_id": 1,
+      "claim_text": "The PowertrainManager software component is responsible for supervisory control over engine operations and motor torque arbitration.",
+      "verification_status": "Grounded",
+      "matched_citations": [
+        1
+      ]
+    },
+    {
+      "claim_id": 2,
+      "claim_text": "It coordinates with the BatteryManagement component via the Sender-Receiver interface SR_TorqueCommand.",
+      "verification_status": "Grounded",
+      "matched_citations": [
+        1
+      ]
+    }
+  ],
+  "grounding_score": 0.95,
+  "confidence_level": "High",
+  "retrieval_strategy": "hybrid_dense_bm25",
+  "latency_breakdown": {
+    "dense_search_ms": 42.1,
+    "bm25_search_ms": 12.4,
+    "fusion_ms": 3.2,
+    "llm_generation_ms": 3120.5,
+    "total_latency_ms": 3178.2
+  }
+}

@@ -1,0 +1,150 @@
+================================================================================
+AUTOSAR AI — UNIVERSITY SUBMISSION FILE MANIFEST & REQUIREMENTS
+================================================================================
+Student Name    : Hamdhan Ahmed B
+Register Number : 127003081
+Degree & Branch : B.Tech. Computer Science & Engineering (AIML)
+University      : SASTRA Deemed University
+Project Title   : AUTOSAR AI – High-Level Design Document Intelligence Platform
+Repository      : https://github.com/hamdhan05/AUTOSAR-AI-Implementation
+Submission Date : October 13, 2026
+================================================================================
+
+1. SYSTEM & RUNTIME PREREQUISITES
+--------------------------------------------------------------------------------
+Operating System : Windows 10 / Windows 11 (64-bit)
+Python Runtime   : Python 3.11.x (tested on Python 3.11.9)
+Local LLM Server : Ollama 0.40+ (http://localhost:11434)
+Active Model     : llama3.2:3b (quantized Q4_K_M GGUF, 3.21B parameters)
+Embedding Model  : sentence-transformers/all-MiniLM-L6-v2 (384-dimensional dense vectors)
+Vector Store     : ChromaDB 0.4.24 (Local persistent disk storage)
+Database Engine  : SQLite 3 with SQLAlchemy 2.0 ORM (14 relational models)
+Web Frontend     : Streamlit 1.32.0 (9 interactive pages)
+API Backend      : FastAPI 0.110.0 / Uvicorn (10 REST routers on port 8000)
+Automated Tests  : Pytest 9.1.1 (28 automated tests across 12 modules, 100% pass rate)
+
+================================================================================
+2. COMPLETE SUBMISSION FILE INVENTORY & SIZES
+--------------------------------------------------------------------------------
+Relative Path                                                     | Size (Bytes)
+--------------------------------------------------------------------------------
+LICENSE_OR_USAGE_NOTES.md                                         |          927
+README.md                                                         |        2,219
+Code/.env.example                                                 |          439
+Code/README.md                                                    |        3,784
+Code/alembic.ini                                                  |          652
+Code/requirements.txt                                             |          421
+Code/run.py                                                       |        2,432
+Code/run_instructions.md                                          |        1,875
+Code/backend/__init__.py                                          |            7
+Code/backend/main.py                                              |        2,373
+Code/backend/api/__init__.py                                      |            7
+Code/backend/api/v1/__init__.py                                   |            7
+Code/backend/api/v1/comparisons.py                                |       10,324
+Code/backend/api/v1/diagnostics.py                                |        3,688
+Code/backend/api/v1/documents.py                                  |        7,034
+Code/backend/api/v1/entities.py                                   |        7,399
+Code/backend/api/v1/evaluation.py                                 |        3,486
+Code/backend/api/v1/findings.py                                   |        1,963
+Code/backend/api/v1/projects.py                                   |        3,728
+Code/backend/api/v1/reports.py                                    |       14,059
+Code/backend/api/v1/sessions.py                                   |        9,761
+Code/backend/api/v1/settings.py                                   |        2,006
+Code/backend/core/config.py                                       |          964
+Code/backend/data/settings.json                                   |          223
+Code/backend/database/base.py                                     |           71
+Code/backend/database/connection.py                               |          438
+Code/backend/database/schema_migrator.py                          |        2,185
+Code/backend/database/migrations/env.py                           |        1,840
+Code/backend/database/migrations/script.py.mako                   |          635
+Code/backend/database/migrations/versions/ee88a9c2dd90_initial_migration.py |       13,731
+Code/backend/models/domain.py                                     |        9,593
+Code/backend/schemas/__init__.py                                  |            7
+Code/backend/schemas/domain.py                                    |        1,271
+Code/backend/services/__init__.py                                 |            7
+Code/backend/services/document_service.py                         |       25,235
+Code/backend/services/evaluation_service.py                       |        7,509
+Code/backend/services/graph_service.py                            |        5,641
+Code/backend/services/grounding_service.py                        |        6,404
+Code/backend/services/llm_service.py                              |       11,011
+Code/backend/services/report_generator.py                         |       22,072
+Code/backend/services/retrieval_service.py                        |        6,776
+Code/backend/services/vector_store_service.py                     |        2,493
+Code/frontend/app.py                                              |        1,725
+Code/frontend/pages/1_Dashboard.py                                |        5,530
+Code/frontend/pages/2_Documents.py                                |        8,265
+Code/frontend/pages/3_Architecture_Explorer.py                    |       11,218
+Code/frontend/pages/4_AI_Assistant.py                             |       22,807
+Code/frontend/pages/5_Comparisons.py                              |       10,155
+Code/frontend/pages/6_Findings.py                                 |        9,092
+Code/frontend/pages/7_Reports.py                                  |        7,210
+Code/frontend/pages/8_Settings.py                                 |        4,325
+Code/frontend/pages/9_Evaluation.py                               |        6,690
+Code/frontend/utils/ui.py                                         |        5,666
+Code/tests/__init__.py                                            |            7
+Code/tests/unit/test_comparison_and_reports.py                    |        4,435
+Code/tests/unit/test_comparisons_and_renames.py                   |        3,511
+Code/tests/unit/test_docs.py                                      |          985
+Code/tests/unit/test_document_pipeline.py                         |        4,548
+Code/tests/unit/test_grounding_and_traceability.py                |        2,878
+Code/tests/unit/test_hybrid_retrieval_and_eval.py                 |        2,309
+Code/tests/unit/test_main.py                                      |          401
+Code/tests/unit/test_ollama_llm.py                                |        1,206
+Code/tests/unit/test_ports_signals_relationships.py               |        4,196
+Code/tests/unit/test_reviews_and_audit.py                         |        2,641
+Code/tests/unit/test_settings_and_diagnostics.py                  |        3,617
+Code/tests/unit/test_versioning_and_governance.py                 |        2,291
+Declarations/Student_Declaration_Template.docx                    |       37,980
+Declarations/Student_Declaration_Template.pdf                     |      170,136
+Declarations/Submission_Checklist.md                              |        3,203
+Documentation/API_Documentation.md                                |        5,163
+Documentation/Cleanup_Report.md                                   |        5,173
+Documentation/Database_Design.md                                  |        8,386
+Documentation/Installation_and_Execution.md                       |        2,628
+Documentation/Internal_Working.md                                 |        7,054
+Documentation/Limitations_and_Future_Scope.md                     |        4,147
+Documentation/Project_Report.docx                                 |       44,292
+Documentation/Project_Report.pdf                                  |      235,437
+Documentation/System_Architecture.md                              |        6,878
+Documentation/Troubleshooting.md                                  |        2,713
+Documentation/Viva_Questions_and_Answers.md                       |       60,658
+Evaluation_Results/Evaluation_Results.csv                         |        1,773
+Evaluation_Results/Feature_Verification_Matrix.md                 |        4,118
+Evaluation_Results/README.md                                      |          182
+Evaluation_Results/Test_Results.md                                |        5,466
+Evaluation_Results/Sample_Output/README.md                        |          321
+Evaluation_Results/Sample_Output/sample_findings_report.csv       |          727
+Evaluation_Results/Sample_Output/sample_rag_response.json         |        1,693
+Input_Data/README.md                                              |        2,020
+Input_Data/Sample_HLD_Documents/1_Synthetic_Automotive_Architecture_RAG_Test.pdf |       36,267
+Input_Data/Sample_HLD_Documents/AUTOSAR_Adaptive_Powertrain_HLD.pdf |        4,092
+Input_Data/Sample_HLD_Documents/README.md                         |          129
+Input_Data/Sample_Query_Set/README.md                             |          101
+Input_Data/Sample_Query_Set/benchmark_dataset_35.json             |        8,047
+Input_Data/Sample_Query_Set/sample_queries_35.csv                 |        3,705
+Model_Prompts_Config/Embedding_Configuration.md                   |        1,434
+Model_Prompts_Config/Model_Configuration.md                       |        1,856
+Model_Prompts_Config/RAG_System_Prompt.md                         |        2,426
+Model_Prompts_Config/README.md                                    |          199
+Model_Prompts_Config/Retrieval_Configuration.md                   |        1,852
+Presentation/AUTOSAR_AI_Hamdhan_Ahmed_B_Presentation.pdf          |    1,003,829
+Presentation/AUTOSAR_AI_Hamdhan_Ahmed_B_Presentation.pptx         |       52,850
+Synopsis/Abstract.txt                                             |        1,390
+Synopsis/Project_Synopsis.docx                                    |       39,997
+Synopsis/Project_Synopsis.pdf                                     |      231,963
+Video/Demo_Scenes.md                                              |        4,113
+Video/Presentation_Script.md                                      |        8,480
+Video/README.md                                                   |          185
+--------------------------------------------------------------------------------
+Total Files Cataloged: 107
+Total Package Size   : 2,335,468 bytes (2.23 MB)
+================================================================================
+
+3. INTENTIONALLY EXCLUDED LOCAL-ONLY RESOURCES
+--------------------------------------------------------------------------------
+1. Python Virtual Environment (venv/): Excluded (~1.8 GB). Recreated via requirements.txt.
+2. Ollama Model Weights (H:\OllamaModels): Excluded (~2.0 GB). Obtained via `ollama pull llama3.2:3b`.
+3. Local Vector Store Binaries (data/vector_store/): Excluded. Auto-generated on PDF ingestion.
+4. Local Active SQLite DB (data/autosar_ai.db): Excluded. Clean tables initialized on backend startup.
+5. Python Bytecode (__pycache__, *.pyc): Cleaned from submission package.
+================================================================================
